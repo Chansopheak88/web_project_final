@@ -11,7 +11,10 @@ export async function getCreateUser(req, res) {
 }
 
 export async function createUser(req, res) {
-    const { firstName, lastName, email, password, confirmPassword, gender, province } = req.body;
+    if (!req.body) {
+        return res.status(400).send("Request body is missing");
+    }
+    const {user_name, email, password, confirmPassword} = req.body;
 
     if (password !== confirmPassword) {
         return res.status(400).send("Passwords do not match.");
@@ -19,8 +22,9 @@ export async function createUser(req, res) {
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        await User.save(firstName, lastName, email, hashedPassword, gender, province);
-        res.redirect('/create');
+        await User.save(user_name, email, hashedPassword);
+        // res.redirect('/create');
+        return res.status(201).send("User created successfully.");
     } catch (error) {
         console.error(error);
 

@@ -16,9 +16,10 @@ app.set('view engine', 'ejs');
 app.set('views', join(__dirname, 'views'));
 app.use(expressLayouts);
 app.set('layout', 'templates/mains');
-app.use(express.urlencoded({ extended: false }));
 
-// All routes BEFORE listen()
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use('/api/v1', apiRoutes);
 app.use('/tools', toolRoutes);
 app.use('/', userRoutes);

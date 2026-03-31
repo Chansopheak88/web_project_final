@@ -65,34 +65,58 @@ export default function App() {
     }
   };
 
-  const handleRegister = (name: string, email: string, password: string) => {
-    // Mock signup - In production, this would save to a backend
-    const savedUsers = JSON.parse(localStorage.getItem("exploitXUsers") || "[]");
-    
-    // Check if user already exists
-    if (savedUsers.some((u: any) => u.email === email)) {
+  const handleRegister = async (name: string, email: string, password: string, confirmPassword: string) => {
+    console.log("Attempting registration with:", { name, email, password, confirmPassword });
+    if (password !== confirmPassword) {
       toast.error("Registration Failed", {
-        description: "An account with this email already exists.",
+        description: "Passwords do not match.",
         duration: 3000,
       });
       return;
     }
-    
-    // Save new user
-    const newUser = { name, email, password };
-    savedUsers.push(newUser);
-    localStorage.setItem("exploitXUsers", JSON.stringify(savedUsers));
-    
-    // Auto-login
-    const userData = { name, email };
-    setUser(userData);
-    localStorage.setItem("exploitXUser", JSON.stringify(userData));
-    setCurrentPage("dashboard");
-    
-    toast.success(`Account Created, ${name}! 🎉`, {
-      description: "You now have full access to all features.",
-      duration: 3000,
-    });
+
+    try {
+      const response = await fetch("http://localhost:4000/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "*/*",
+        },
+        body: JSON.stringify({
+          user_name: name,
+          email,
+          password,
+          confirmPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Assuming backend returns { message: string } on error
+        toast.error("Registration Failed", {
+          description: data.message || "Something went wrong",
+          duration: 3000,
+        });
+        return;
+      }
+
+      // Auto-login on successful registration
+      const userData = { name, email };
+      setUser(userData);
+      localStorage.setItem("exploitXUser", JSON.stringify(userData));
+      setCurrentPage("dashboard");
+
+      toast.success(`Account Created, ${name}! 🎉`, {
+        description: "You now have full access to all features.",
+        duration: 3000,
+      });
+    } catch (error: any) {
+      toast.error("Registration Failed", {
+        description: error.message || "Network error",
+        duration: 3000,
+      });
+    }
   };
 
   const handleLogout = () => {

@@ -338,3 +338,4 @@ export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: Re
     </div>
   );
 }
+
