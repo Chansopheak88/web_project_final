@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Shield, ArrowLeft, Terminal, Code, Lock, Activity, Database, Copy, Check } from "lucide-react";
+import { Shield, ArrowLeft, Terminal, Code, Activity, Database, Copy, Check, ChevronDown, ChevronUp, Lock } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface AdvancedTutorialsPageProps {
