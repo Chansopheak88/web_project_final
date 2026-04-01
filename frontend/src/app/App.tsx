@@ -76,7 +76,7 @@ export default function App() {
     }
 
     try {
-      const response = await fetch("http://localhost:4000/create", {
+      const response = await fetch("http://localhost:4000/api/v1/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

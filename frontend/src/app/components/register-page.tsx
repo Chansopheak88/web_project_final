@@ -3,7 +3,7 @@ import { Shield, Mail, Lock, Terminal, ArrowLeft, Eye, EyeOff, User } from "luci
 import { motion } from "motion/react";
 
 interface RegisterPageProps {
-  onRegister: (name: string, email: string, password: string) => void;
+  onRegister: (name: string, email: string, password: string, confirmPassword: string) => void;
   onNavigateToLogin: () => void;
   onBackToHome: () => void;
 }
@@ -30,7 +30,7 @@ export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: Re
       return;
     }
 
-    onRegister(name, email, password);
+    onRegister(name, email, password, confirmPassword);
   };
 
   return (
