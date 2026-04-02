@@ -475,7 +475,7 @@ export function ContactSection() {
                   <Phone className="w-6 h-6 text-green-500 mt-1" />
                   <div>
                     <p className="text-green-500 font-mono mb-1">PHONE</p>
-                    <p className="text-gray-400">+1 (555) 123-4567</p>
+                    <p className="text-gray-400">+1 (855) 123-4567</p>
                     <p className="text-gray-400">Mon-Fri, 9AM-6PM EST</p>
                   </div>
                 </div>
@@ -483,9 +483,9 @@ export function ContactSection() {
                   <MapPin className="w-6 h-6 text-green-500 mt-1" />
                   <div>
                     <p className="text-green-500 font-mono mb-1">ADDRESS</p>
-                    <p className="text-gray-400">123 Cyber Security Lane</p>
-                    <p className="text-gray-400">Tech District, CA 94000</p>
-                    <p className="text-gray-400">United States</p>
+                    <p className="text-gray-400">Cambodia Academy of Digital Technology, IDT building</p>
+                    <p className="text-gray-400">Prek Leap, Phnom Penh</p>
+                    <p className="text-gray-400">Cambodia</p>
                   </div>
                 </div>
               </div>
