@@ -7,6 +7,7 @@ import { BasicToolsPage } from "./components/basic-tools-page";
 import { AdvancedToolsPage } from "./components/advanced-tools-page";
 import { HackerProfilesPage } from "./components/hacker-profiles-page";
 import { AdvancedTutorialsPage } from "./components/advanced-tutorials-page";
+import { AdminPage } from "./components/admin-page";
 import { RatingSection, ForumSection, AboutSection, ContactSection } from "./components/landing-sections";
 import { toast , Toaster} from "sonner";
 
@@ -18,20 +19,76 @@ interface User {
   avatarUrl?: string | null;
 }
 
-type PageView = "home" | "login" | "register" | "dashboard" | "basic-tools" | "advanced-tools" | "hacker-profiles" | "advanced-tutorials";
+type PageView =
+  | "home"
+  | "login"
+  | "register"
+  | "dashboard"
+  | "basic-tools"
+  | "advanced-tools"
+  | "hacker-profiles"
+  | "advanced-tutorials"
+  | "admin";
+
+const getPageFromPath = (pathname: string): PageView => {
+  const cleanPath = pathname.toLowerCase().replace(/\/+$/, "") || "/";
+
+  if (cleanPath === "/admin") return "admin";
+  if (cleanPath === "/login") return "login";
+  if (cleanPath === "/register") return "register";
+  if (cleanPath === "/dashboard") return "dashboard";
+  if (cleanPath === "/basic-tools") return "basic-tools";
+  if (cleanPath === "/advanced-tools") return "advanced-tools";
+  if (cleanPath === "/hacker-profiles") return "hacker-profiles";
+  if (cleanPath === "/advanced-tutorials") return "advanced-tutorials";
+  return "home";
+};
+
+const getPathFromPage = (page: PageView): string => {
+  if (page === "home") return "/";
+  if (page === "basic-tools") return "/basic-tools";
+  if (page === "advanced-tools") return "/advanced-tools";
+  if (page === "hacker-profiles") return "/hacker-profiles";
+  if (page === "advanced-tutorials") return "/advanced-tutorials";
+  return `/${page}`;
+};
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<PageView>("home");
   const [user, setUser] = useState<User | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Check for saved user in localStorage on mount
   useEffect(() => {
     const savedUser = localStorage.getItem("exploitXUser");
+    const requestedPage = getPageFromPath(window.location.pathname);
+
     if (savedUser) {
       setUser(JSON.parse(savedUser));
-      setCurrentPage("dashboard");
+      setCurrentPage(requestedPage === "home" ? "dashboard" : requestedPage);
+      setIsInitialized(true);
+      return;
     }
+    setCurrentPage(requestedPage);
+    setIsInitialized(true);
   }, []);
+
+  useEffect(() => {
+    const onPopState = () => {
+      setCurrentPage(getPageFromPath(window.location.pathname));
+    };
+
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  useEffect(() => {
+    if (!isInitialized) return;
+    const targetPath = getPathFromPage(currentPage);
+    if (window.location.pathname !== targetPath) {
+      window.history.replaceState({}, "", targetPath);
+    }
+  }, [currentPage, isInitialized]);
 
   // Smooth scroll behavior
   useEffect(() => {
@@ -267,6 +324,10 @@ export default function App() {
 
       {currentPage === "advanced-tutorials" && (
         <AdvancedTutorialsPage onBackToDashboard={() => setCurrentPage("dashboard")} />
+      )}
+
+      {currentPage === "admin" && (
+        <AdminPage onBackToHome={() => setCurrentPage("home")} />
       )}
 
       {currentPage === "dashboard" && user && (

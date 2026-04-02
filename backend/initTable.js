@@ -13,6 +13,18 @@ async function columnExists(tableName, columnName) {
   return rows.length > 0;
 }
 
+async function tableExists(tableName) {
+  const [rows] = await db.query(
+    `SELECT TABLE_NAME
+     FROM INFORMATION_SCHEMA.TABLES
+     WHERE TABLE_SCHEMA = DATABASE()
+       AND TABLE_NAME = ?`,
+    [tableName]
+  );
+
+  return rows.length > 0;
+}
+
 async function initTables() {
   try {
     // USERS TABLE
@@ -22,6 +34,8 @@ async function initTables() {
         user_name VARCHAR(100) NOT NULL,
         email VARCHAR(150) NOT NULL UNIQUE,
         password VARCHAR(255) NULL,
+        role VARCHAR(30) NOT NULL DEFAULT 'User',
+        status ENUM('active','pending','suspended') NOT NULL DEFAULT 'active',
         auth_provider VARCHAR(20) NOT NULL DEFAULT 'local',
         google_id VARCHAR(191) NULL UNIQUE,
         avatar_url TEXT NULL,
@@ -34,20 +48,60 @@ async function initTables() {
 
     // Backward-compatible migration for existing users table
     await db.query(`ALTER TABLE users MODIFY COLUMN password VARCHAR(255) NULL`);
+
+    if (!(await columnExists('users', 'role'))) {
+      await db.query(`ALTER TABLE users ADD COLUMN role VARCHAR(30) NOT NULL DEFAULT 'User'`);
+    }
+
+    // Make sure existing role default is User
+    await db.query(`ALTER TABLE users MODIFY COLUMN role VARCHAR(30) NOT NULL DEFAULT 'User'`);
+
+    if (!(await columnExists('users', 'status'))) {
+      await db.query(`ALTER TABLE users ADD COLUMN status ENUM('active','pending','suspended') NOT NULL DEFAULT 'active'`);
+    }
+
     if (!(await columnExists('users', 'auth_provider'))) {
       await db.query(`ALTER TABLE users ADD COLUMN auth_provider VARCHAR(20) NOT NULL DEFAULT 'local'`);
     }
+
     if (!(await columnExists('users', 'google_id'))) {
       await db.query(`ALTER TABLE users ADD COLUMN google_id VARCHAR(191) NULL UNIQUE`);
     }
+
     if (!(await columnExists('users', 'avatar_url'))) {
       await db.query(`ALTER TABLE users ADD COLUMN avatar_url TEXT NULL`);
     }
+
     if (!(await columnExists('users', 'last_login_at'))) {
       await db.query(`ALTER TABLE users ADD COLUMN last_login_at DATETIME NULL`);
     }
 
     console.log("✅ users table migration checked");
+
+    // SECURITY ALERTS TABLE
+    const hasSecurityAlerts = await tableExists('security_alerts');
+    if (!hasSecurityAlerts) {
+      await db.query(`
+        CREATE TABLE security_alerts (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          severity ENUM('Low','Medium','High') NOT NULL DEFAULT 'Low',
+          title VARCHAR(191) NOT NULL,
+          detail TEXT NOT NULL,
+          is_resolved TINYINT(1) NOT NULL DEFAULT 0,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      await db.query(`
+        INSERT INTO security_alerts (severity, title, detail)
+        VALUES
+        ('High', 'Multiple failed login attempts', 'Authentication threshold exceeded for one client IP'),
+        ('Medium', 'New admin route access', 'Admin routes were accessed in the last hour'),
+        ('Low', 'Routine backup complete', 'Database backup finished successfully')
+      `);
+    }
+
+    console.log("✅ security_alerts table ready");
 
     // CATEGORIES TABLE
     await db.query(`
