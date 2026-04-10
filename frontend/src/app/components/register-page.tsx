@@ -3,13 +3,14 @@ import { Shield, Mail, Lock, Terminal, ArrowLeft, Eye, EyeOff, User } from "luci
 import { motion } from "motion/react";
 
 interface RegisterPageProps {
-  onRegister: (name: string, email: string, password: string, confirmPassword: string) => void;
+  onRegister: (firstName: string, lastName: string, email: string, password: string, confirmPassword: string) => void;
   onNavigateToLogin: () => void;
   onBackToHome: () => void;
 }
 
 export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: RegisterPageProps) {
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -20,7 +21,7 @@ export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: Re
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (password !== confirmPassword) {
+    if (password.trim() !== confirmPassword.trim()) {
       alert("Passwords do not match!");
       return;
     }
@@ -30,7 +31,7 @@ export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: Re
       return;
     }
 
-    onRegister(name, email, password, confirmPassword);
+    onRegister(firstName.trim(), lastName.trim(), email.trim(), password.trim(), confirmPassword.trim());
   };
 
   return (
@@ -125,24 +126,46 @@ export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: Re
 
             {/* Register Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Username Field */}
+              {/* First Name Field */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
               >
                 <label className="block text-green-500 mb-2 font-mono text-sm tracking-wider">
-                  USERNAME
+                  FIRST NAME
                 </label>
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-green-500/50" />
                   <input
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                     required
                     className="w-full bg-black border-2 border-green-500/30 text-green-500 pl-12 pr-4 py-3 focus:outline-none focus:border-green-500 transition-all font-mono placeholder-green-500/30"
-                    placeholder="cyberwarrior"
+                    placeholder="John"
+                  />
+                </div>
+              </motion.div>
+
+              {/* Last Name Field */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.45 }}
+              >
+                <label className="block text-green-500 mb-2 font-mono text-sm tracking-wider">
+                  LAST NAME
+                </label>
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-green-500/50" />
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    required
+                    className="w-full bg-black border-2 border-green-500/30 text-green-500 pl-12 pr-4 py-3 focus:outline-none focus:border-green-500 transition-all font-mono placeholder-green-500/30"
+                    placeholder="Doe"
                   />
                 </div>
               </motion.div>

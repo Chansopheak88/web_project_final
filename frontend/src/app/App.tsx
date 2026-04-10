@@ -65,9 +65,9 @@ export default function App() {
     }
   };
 
-  const handleRegister = async (name: string, email: string, password: string, confirmPassword: string) => {
-    console.log("Attempting registration with:", { name, email, password, confirmPassword });
-    if (password !== confirmPassword) {
+  const handleRegister = async (firstName: string, lastName: string, email: string, password: string, confirmPassword: string) => {
+    console.log("Attempting registration with:", { firstName, lastName, email, password, confirmPassword });
+    if (password.trim() !== confirmPassword.trim()) {
       toast.error("Registration Failed", {
         description: "Passwords do not match.",
         duration: 3000,
@@ -83,7 +83,8 @@ export default function App() {
           Accept: "*/*",
         },
         body: JSON.stringify({
-          user_name: name,
+          first_name: firstName,
+          last_name: lastName,
           email,
           password,
           confirmPassword,
@@ -102,12 +103,13 @@ export default function App() {
       }
 
       // Auto-login on successful registration
-      const userData = { name, email };
+      const fullName = `${firstName} ${lastName}`;
+      const userData = { name: fullName, email };
       setUser(userData);
       localStorage.setItem("exploitXUser", JSON.stringify(userData));
       setCurrentPage("dashboard");
 
-      toast.success(`Account Created, ${name}! 🎉`, {
+      toast.success(`Account Created, ${fullName}! 🎉`, {
         description: "You now have full access to all features.",
         duration: 3000,
       });

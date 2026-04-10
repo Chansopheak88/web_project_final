@@ -38,10 +38,10 @@ class User {
     }
 
     // Save new user
-    static save(user_name, email, password) {
+    static save(first_name, last_name, email, password) {
         return db.execute(
-            'INSERT INTO users (user_name, email, password) VALUES (?,?,?)',
-            [user_name, email, password]
+            'INSERT INTO users (first_name, last_name, email, password) VALUES (?,?,?,?)',
+            [first_name, last_name, email, password]
         );
     }
 
@@ -52,11 +52,11 @@ class User {
         );
     }
 
-    // Search user by user_name
-    static findUser(user_name) {
+    // Search user by first_name
+    static findUser(first_name) {
         return db.execute(
-            'SELECT * FROM users WHERE user_name LIKE ?',
-            [`%${user_name}%`]
+            'SELECT * FROM users WHERE first_name LIKE ?',
+            [`%${first_name}%`]
         );
     }
 }

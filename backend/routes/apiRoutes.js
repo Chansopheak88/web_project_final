@@ -10,12 +10,19 @@ router.get('/test', (req, res) => {
 
 router.post('/create', async (req, res) => {
   try {
-    const { user_name, email, password } = req.body;
+    const { first_name, last_name, email, password, confirmPassword } = req.body;
 
-    if (!user_name || !email || !password) {
+    if (!first_name || !last_name || !email || !password || !confirmPassword) {
       return res.status(400).json({
         success: false,
-        message: 'All fields are required: user_name, email, password'
+        message: 'All fields are required: first_name, last_name, email, password, confirmPassword'
+      });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Passwords do not match'
       });
     }
 
@@ -27,15 +34,15 @@ router.post('/create', async (req, res) => {
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10); // ✅ inside route
-    await User.save(user_name, email, hashedPassword);      // ✅ inside route
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.save(first_name, last_name, email, hashedPassword);
 
-    console.log("✅ Registered:", user_name, email);
+    console.log("✅ Registered:", first_name, last_name, email);
 
     res.status(201).json({
       success: true,
       message: 'User created successfully',
-      user: { name: user_name, email }
+      user: { name: `${first_name} ${last_name}`, email }
     });
 
   } catch (error) {
