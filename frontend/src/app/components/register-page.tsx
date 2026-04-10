@@ -1,27 +1,106 @@
+<<<<<<< HEAD
 import { useState } from "react";
+=======
+import { useEffect, useState } from "react";
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
 import { Shield, Mail, Lock, Terminal, ArrowLeft, Eye, EyeOff, User } from "lucide-react";
 import { motion } from "motion/react";
 
 interface RegisterPageProps {
+<<<<<<< HEAD
   onRegister: (firstName: string, lastName: string, email: string, password: string, confirmPassword: string) => void;
+=======
+  onRegister: (name: string, email: string, password: string, confirmPassword: string) => void;
+  onGoogleLogin: (credential: string) => void;
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
   onNavigateToLogin: () => void;
   onBackToHome: () => void;
 }
 
+<<<<<<< HEAD
 export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: RegisterPageProps) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+=======
+declare global {
+  interface Window {
+    google?: any;
+  }
+}
+
+export function RegisterPage({ onRegister, onGoogleLogin, onNavigateToLogin, onBackToHome }: RegisterPageProps) {
+  const [name, setName] = useState("");
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+<<<<<<< HEAD
+=======
+  const hasGoogleClientId = Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID);
+
+  useEffect(() => {
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    if (!clientId) return;
+
+    const initializeGoogleButton = () => {
+      if (!window.google?.accounts?.id) return;
+
+      window.google.accounts.id.initialize({
+        client_id: clientId,
+        callback: (response: any) => {
+          if (response?.credential) {
+            onGoogleLogin(response.credential);
+          }
+        },
+      });
+
+      window.google.accounts.id.renderButton(
+        document.getElementById("google-register-btn"),
+        {
+          theme: "outline",
+          size: "large",
+          type: "standard",
+          text: "continue_with",
+          shape: "rectangular",
+          width: 360,
+        }
+      );
+    };
+
+    const existingScript = document.querySelector(
+      'script[src="https://accounts.google.com/gsi/client"]'
+    ) as HTMLScriptElement | null;
+
+    if (existingScript) {
+      if (window.google?.accounts?.id) initializeGoogleButton();
+      else existingScript.addEventListener("load", initializeGoogleButton);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = initializeGoogleButton;
+    document.body.appendChild(script);
+
+    return () => {
+      script.onload = null;
+    };
+  }, [onGoogleLogin]);
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+<<<<<<< HEAD
     if (password.trim() !== confirmPassword.trim()) {
+=======
+    if (password !== confirmPassword) {
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
       alert("Passwords do not match!");
       return;
     }
@@ -31,7 +110,11 @@ export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: Re
       return;
     }
 
+<<<<<<< HEAD
     onRegister(firstName.trim(), lastName.trim(), email.trim(), password.trim(), confirmPassword.trim());
+=======
+    onRegister(name, email, password, confirmPassword);
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
   };
 
   return (
@@ -126,19 +209,28 @@ export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: Re
 
             {/* Register Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
+<<<<<<< HEAD
               {/* First Name Field */}
+=======
+              {/* Username Field */}
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
               >
                 <label className="block text-green-500 mb-2 font-mono text-sm tracking-wider">
+<<<<<<< HEAD
                   FIRST NAME
+=======
+                  USERNAME
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
                 </label>
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-green-500/50" />
                   <input
                     type="text"
+<<<<<<< HEAD
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     required
@@ -166,6 +258,13 @@ export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: Re
                     required
                     className="w-full bg-black border-2 border-green-500/30 text-green-500 pl-12 pr-4 py-3 focus:outline-none focus:border-green-500 transition-all font-mono placeholder-green-500/30"
                     placeholder="Doe"
+=======
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    className="w-full bg-black border-2 border-green-500/30 text-green-500 pl-12 pr-4 py-3 focus:outline-none focus:border-green-500 transition-all font-mono placeholder-green-500/30"
+                    placeholder="cyberwarrior"
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
                   />
                 </div>
               </motion.div>
@@ -298,6 +397,29 @@ export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: Re
                 />
               </motion.button>
 
+<<<<<<< HEAD
+=======
+              {/* Google Register */}
+              <div className="relative py-2">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-green-500/20"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-4 bg-black text-green-500/50 font-mono">OR</span>
+                </div>
+              </div>
+
+              <div className="flex justify-center">
+                {hasGoogleClientId ? (
+                  <div id="google-register-btn"></div>
+                ) : (
+                  <p className="text-yellow-500/80 font-mono text-xs">
+                    Google login hidden: set VITE_GOOGLE_CLIENT_ID in frontend/.env
+                  </p>
+                )}
+              </div>
+
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
               {/* Divider */}
               <div className="relative py-4">
                 <div className="absolute inset-0 flex items-center">
@@ -361,4 +483,7 @@ export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: Re
     </div>
   );
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e

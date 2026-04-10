@@ -12,7 +12,10 @@ import toolRoutes from './routes/toolRoutes.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 
+<<<<<<< HEAD
 // 1. Configure CORS once
+=======
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
 const corsOptions = {
   origin: function(origin, callback) {
     const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176'];
@@ -27,6 +30,7 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   optionsSuccessStatus: 200
 };
+<<<<<<< HEAD
 
 // 2. Apply Middlewares
 app.use(cors(corsOptions));
@@ -35,11 +39,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // 3. View Engine (Optional if you are moving fully to React)
+=======
+app.use(cors(corsOptions));
+app.options('/api/v1/create', cors(corsOptions));
+
+app.use(sessionConfig);
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
 app.set('view engine', 'ejs');
 app.set('views', join(__dirname, 'views'));
 app.use(expressLayouts);
 app.set('layout', 'templates/mains');
 
+<<<<<<< HEAD
 // 4. Routes
 app.use('/api/v1', apiRoutes);
 app.use('/tools', toolRoutes);
@@ -47,3 +58,19 @@ app.use('/', userRoutes);
 
 const PORT = process.env.PORT_APP || 4000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+=======
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/api/v1', apiRoutes);
+app.use('/tools', toolRoutes);
+app.use('/', userRoutes);
+app.use(cors({
+  origin: 'http://localhost:5173', 
+  credentials: true,
+}));
+
+const PORT = process.env.PORT_APP || 4000;
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e

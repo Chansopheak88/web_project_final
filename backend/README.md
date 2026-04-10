@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ExploitX
 
 ## Setup Instructions
@@ -19,3 +20,7 @@ node app.js
 
 ### 5. Open browser
 http://localhost:4000
+=======
+# web_project_final
+this is for website development final project it's about website for cybersecurity tool
+>>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
