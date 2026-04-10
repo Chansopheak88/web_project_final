@@ -1,7 +1,6 @@
 import User from '../models/userModel.js';
 import bcrypt from 'bcrypt';
 
-<<<<<<< HEAD
 // 1. Register a new user
 export async function createUser(req, res) {
     const { first_name, last_name, email, password, confirmPassword } = req.body;
@@ -12,30 +11,10 @@ export async function createUser(req, res) {
 
     if (password.trim() !== confirmPassword.trim()) {
         return res.status(400).json({ success: false, message: "Passwords do not match." });
-=======
-export async function getCreateUser(req, res) {
-    try {
-        res.render('users/userIndex', { layout: 'templates/mains', title: 'Users' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-    }
-}
-
-export async function createUser(req, res) {
-    if (!req.body) {
-        return res.status(400).send("Request body is missing");
-    }
-    const {user_name, email, password, confirmPassword} = req.body;
-
-    if (password !== confirmPassword) {
-        return res.status(400).send("Passwords do not match.");
->>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
     }
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-<<<<<<< HEAD
         await User.save(first_name, last_name, email, hashedPassword);
         
         return res.status(201).json({ success: true, message: "User created successfully." });
@@ -48,26 +27,6 @@ export async function createUser(req, res) {
 }
 
 // 2. Login user
-=======
-        await User.save(user_name, email, hashedPassword);
-        // res.redirect('/create');
-        return res.status(201).send("User created successfully.");
-    } catch (error) {
-        console.error(error);
-
-        if (error.code === 'ER_DUP_ENTRY') {
-            return res.status(400).send("Email already exists.");
-        }
-
-        res.status(500).send("Server Error");
-    }
-}
-
-export async function login(req, res) {
-    try {
-        res.render('users/login', { layout: 'templates/mains', title: 'Login' });
-    } catch (error) {
-        console.error(error);
         res.status(500).send('Internal Server Error');
     }
 }
