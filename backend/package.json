@@ -21,10 +21,6 @@
     "express-ejs-layouts": "^2.5.1",
     "express-mysql-session": "^3.0.3",
     "express-session": "^1.19.0",
-<<<<<<< HEAD
-=======
-    "google-auth-library": "^10.6.2",
->>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
     "mysql2": "^3.20.0"
   },
   "devDependencies": {

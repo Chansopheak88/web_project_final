@@ -31,7 +31,7 @@ export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: Re
       return;
     }
 
-    onRegister(firstName.trim(), lastName.trim(), email.trim(), password.trim(), confirmPassword.trim());
+    onRegister(firstName, lastName, email, password, confirmPassword);
   };
 
   return (
@@ -167,7 +167,6 @@ export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: Re
                     className="w-full bg-black border-2 border-green-500/30 text-green-500 pl-12 pr-4 py-3 focus:outline-none focus:border-green-500 transition-all font-mono placeholder-green-500/30"
                     placeholder="Doe"
                   />
-                  />
                 </div>
               </motion.div>
 
@@ -299,7 +298,7 @@ export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: Re
                 />
               </motion.button>
 
-              {/* Divider */}}
+              {/* Divider */}
               <div className="relative py-4">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-green-500/20"></div>
@@ -362,3 +361,4 @@ export function RegisterPage({ onRegister, onNavigateToLogin, onBackToHome }: Re
     </div>
   );
 }
+

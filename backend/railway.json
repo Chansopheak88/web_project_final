@@ -4,6 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
+    "buildCommand": "cd ../frontend && npm install && npm run build && cd ../backend",
     "startCommand": "node app.js",
     "restartPolicyType": "ON_FAILURE"
   }

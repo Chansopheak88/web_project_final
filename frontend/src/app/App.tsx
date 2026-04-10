@@ -55,42 +55,14 @@ export default function App() {
       setCurrentPage("dashboard");
       toast.success(`Welcome back, ${foundUser.name}! 🔓`, {
         description: "All features have been unlocked.",
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({ email, password }),
-    })
-      .then(async (response) => {
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || "Invalid email or password");
-        }
-
-        const userData: User = {
-          id: data.user.id,
-          name: data.user.name,
-          email: data.user.email,
-          authProvider: data.user.authProvider,
-          avatarUrl: data.user.avatarUrl ?? null,
-        };
-
-        setUser(userData);
-        localStorage.setItem("exploitXUser", JSON.stringify(userData));
-        setCurrentPage("dashboard");
-
-        toast.success(`Welcome back, ${data.user.name}! 🔓`, {
-          description: "All features have been unlocked.",
-          duration: 3000,
-        });
-      })
-      .catch((error) => {
-        toast.error("Access Denied", {
-          description: error.message || "Invalid email or password. Please try again.",
-          duration: 3000,
-        });
+        duration: 3000,
       });
+    } else {
+      toast.error("Access Denied", {
+        description: "Invalid email or password. Please try again.",
+        duration: 3000,
+      });
+    }
   };
 
   const handleRegister = async (firstName: string, lastName: string, email: string, password: string, confirmPassword: string) => {
@@ -111,12 +83,13 @@ export default function App() {
           Accept: "*/*",
         },
         body: JSON.stringify({
-          first_name: firstName,
-          last_name: lastName,
-          email,
-          password,
-          confirmPassword,
+          first_name: firstName.trim(),
+          last_name: lastName.trim(),
+          email: email.trim(),
+          password: password.trim(),
+          confirmPassword: confirmPassword.trim(),
         }),
+      });
 
       const data = await response.json();
 
@@ -226,6 +199,7 @@ export default function App() {
       {currentPage === "advanced-tutorials" && (
         <AdvancedTutorialsPage onBackToDashboard={() => setCurrentPage("dashboard")} />
       )}
+
       {currentPage === "dashboard" && user && (
         <Dashboard 
           user={user} 

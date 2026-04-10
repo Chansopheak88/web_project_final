@@ -1,93 +1,17 @@
-<<<<<<< HEAD
 import { useState } from "react";
-=======
-import { useEffect, useState } from "react";
->>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
 import { Shield, Mail, Lock, Terminal, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { motion } from "motion/react";
 
 interface LoginPageProps {
   onLogin: (email: string, password: string) => void;
-<<<<<<< HEAD
-=======
-  onGoogleLogin: (credential: string) => void;
->>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
   onNavigateToRegister: () => void;
   onBackToHome: () => void;
 }
 
-<<<<<<< HEAD
 export function LoginPage({ onLogin, onNavigateToRegister, onBackToHome }: LoginPageProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-=======
-declare global {
-  interface Window {
-    google?: any;
-  }
-}
-
-export function LoginPage({ onLogin, onGoogleLogin, onNavigateToRegister, onBackToHome }: LoginPageProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const hasGoogleClientId = Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID);
-
-  useEffect(() => {
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    if (!clientId) return;
-
-    const initializeGoogleButton = () => {
-      if (!window.google?.accounts?.id) return;
-
-      window.google.accounts.id.initialize({
-        client_id: clientId,
-        callback: (response: any) => {
-          if (response?.credential) {
-            onGoogleLogin(response.credential);
-          }
-        },
-      });
-
-      window.google.accounts.id.renderButton(
-        document.getElementById("google-signin-btn"),
-        {
-          theme: "outline",
-          size: "large",
-          type: "standard",
-          text: "continue_with",
-          shape: "rectangular",
-          width: 360,
-        }
-      );
-    };
-
-    const existingScript = document.querySelector(
-      'script[src="https://accounts.google.com/gsi/client"]'
-    ) as HTMLScriptElement | null;
-
-    if (existingScript) {
-      if (window.google?.accounts?.id) initializeGoogleButton();
-      else existingScript.addEventListener("load", initializeGoogleButton);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
-    script.async = true;
-    script.defer = true;
-    script.onload = initializeGoogleButton;
-    document.body.appendChild(script);
-
-    return () => {
-      script.onload = null;
-      if (window.google?.accounts?.id) {
-        window.google.accounts.id.cancel();
-      }
-    };
-  }, [onGoogleLogin]);
->>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -290,19 +214,6 @@ export function LoginPage({ onLogin, onGoogleLogin, onNavigateToRegister, onBack
                 </div>
               </div>
 
-<<<<<<< HEAD
-=======
-              <div className="flex justify-center">
-                {hasGoogleClientId ? (
-                  <div id="google-signin-btn"></div>
-                ) : (
-                  <p className="text-yellow-500/80 font-mono text-xs">
-                    Google login hidden: set VITE_GOOGLE_CLIENT_ID in frontend/.env
-                  </p>
-                )}
-              </div>
-
->>>>>>> 0d6948a627533ef766519f9bf2797a05cacbdd0e
               {/* Register Link */}
               <motion.div
                 initial={{ opacity: 0 }}
