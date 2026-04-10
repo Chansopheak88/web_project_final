@@ -9,6 +9,6 @@
     "dev": "concurrently \"cd backend && npm start\" \"cd frontend && npm run dev\""
   },
   "engines": {
-    "node": ">=20.19.0"
+    "node": ">=22.12.0"
   }
 }
