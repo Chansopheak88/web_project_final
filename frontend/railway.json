@@ -4,7 +4,8 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "node app.js",
+    "buildCommand": "npm install --force && npm run build",
+    "startCommand": "npm run preview",
     "restartPolicyType": "ON_FAILURE"
   }
 }

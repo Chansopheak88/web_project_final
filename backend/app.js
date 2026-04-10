@@ -24,7 +24,7 @@ const corsOptions = {
       'http://localhost:4000'
     ];
     
-    // Allow requests from same origin (for production on Railway)
+    // Allow all origins in production (Railway services can communicate freely)
     if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV === 'production') {
       callback(null, true);
     } else {
@@ -43,9 +43,6 @@ app.use(sessionConfig);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from frontend build (production)
-app.use(express.static(join(__dirname, 'public')));
-
 // 3. View Engine (Optional if you are moving fully to React)
 app.set('view engine', 'ejs');
 app.set('views', join(__dirname, 'views'));
@@ -56,11 +53,6 @@ app.set('layout', 'templates/mains');
 app.use('/api/v1', apiRoutes);
 app.use('/tools', toolRoutes);
 app.use('/', userRoutes);
-
-// 5. SPA fallback - serve index.html for all non-API routes
-app.get('*', (req, res) => {
-  res.sendFile(join(__dirname, 'public', 'index.html'));
-});
 
 const PORT = process.env.PORT_APP || 4000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

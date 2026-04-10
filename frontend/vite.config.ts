@@ -15,7 +15,7 @@ if (typeof global !== 'undefined' && !global.CustomEvent) {
 export default defineConfig({
   plugins: [tailwindcss(), react()],
   build: {
-    outDir: '../backend/public',
+    outDir: 'dist',
     emptyOutDir: true
   },
   server: {
