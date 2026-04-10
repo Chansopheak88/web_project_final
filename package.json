@@ -4,7 +4,7 @@
   "description": "ExploitX - Express + React Full Stack App",
   "type": "module",
   "scripts": {
-    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "build": "npm install --prefix backend --force && npm install --prefix frontend --force && npm run build --prefix frontend",
     "start": "node backend/app.js",
     "dev": "concurrently \"cd backend && npm start\" \"cd frontend && npm run dev\""
   },
