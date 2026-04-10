@@ -1,0 +1,101 @@
+import User from '../models/userModel.js';
+import bcrypt from 'bcrypt';
+
+export async function getCreateUser(req, res) {
+    try {
+        res.render('users/userIndex', { layout: 'templates/mains', title: 'Users' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+export async function createUser(req, res) {
+    if (!req.body) {
+        return res.status(400).send("Request body is missing");
+    }
+    const {user_name, email, password, confirmPassword} = req.body;
+
+    if (password !== confirmPassword) {
+        return res.status(400).send("Passwords do not match.");
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await User.save(user_name, email, hashedPassword);
+        // res.redirect('/create');
+        return res.status(201).send("User created successfully.");
+    } catch (error) {
+        console.error(error);
+
+        if (error.code === 'ER_DUP_ENTRY') {
+            return res.status(400).send("Email already exists.");
+        }
+
+        res.status(500).send("Server Error");
+    }
+}
+
+export async function login(req, res) {
+    try {
+        res.render('users/login', { layout: 'templates/mains', title: 'Login' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+export async function loginUser(req, res) {
+    const { email, password } = req.body;
+
+    try {
+        const [rows] = await User.loginUser(email);
+
+        if (rows.length === 0) return res.send("User not found");
+
+        const user = rows[0];
+        const match = await bcrypt.compare(password, user.password);
+
+        if (match) {
+            req.session.userId = user.id;
+            req.session.userName = user.first_name;
+            return res.redirect('/dashboard');
+        }
+
+        res.send("Wrong password");
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+}
+
+export async function listUser(req, res) {
+    try {
+        const [rows] = await User.fetchAll();
+
+        res.render('users/list', {
+            layout: 'templates/mains',
+            title: 'Users',
+            users: rows,
+            userName: req.session.userName
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+export async function findUser(req, res) {
+    try {
+        const { firstName } = req.body;
+        const [rows] = await User.findUser(firstName);
+
+        res.render('users/list', {
+            layout: 'templates/mains',
+            title: 'Find User',
+            users: rows
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+}
