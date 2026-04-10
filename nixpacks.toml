@@ -1,0 +1,5 @@
+[build]
+providers = ["nodejs-pnpm", "nodejs-npm", "nodejs-yarn"]
+
+[build.variables]
+NODE_VERSION = "20"
