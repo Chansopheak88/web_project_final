@@ -10,6 +10,8 @@ import { AdvancedTutorialsPage } from "./components/advanced-tutorials-page";
 import { RatingSection, ForumSection, AboutSection, ContactSection } from "./components/landing-sections";
 import { toast , Toaster} from "sonner";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+
 interface User {
   name: string;
   email: string;
@@ -76,7 +78,7 @@ export default function App() {
     }
 
     try {
-      const response = await fetch("http://localhost:4000/api/v1/create", {
+      const response = await fetch(`${API_URL}/api/v1/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -51,7 +51,7 @@ interface AdminStats {
   moderators: number;
 }
 
-const API_BASE = "http://localhost:4000/api/v1";
+const API_BASE = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/v1` : "http://localhost:4000/api/v1";
 
 export function AdminPage({ onBackToHome }: AdminPageProps) {
   const [query, setQuery] = useState("");

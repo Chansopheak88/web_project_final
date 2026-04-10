@@ -21,11 +21,18 @@ const corsOptions = {
       'http://localhost:5175', 
       'http://localhost:5176',
       'http://localhost:3000',
-      'http://localhost:4000'
+      'http://localhost:4000',
+      'https://vercel.com',
+      /\.vercel\.app$/  // Allow all Vercel preview and production URLs
     ];
     
-    // Allow all origins in production (Railway services can communicate freely)
-    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV === 'production') {
+    // Allow all origins in production
+    if (!origin || process.env.NODE_ENV === 'production') {
+      callback(null, true);
+    } else if (allowedOrigins.some(allowed => {
+      if (allowed instanceof RegExp) return allowed.test(origin);
+      return allowed === origin;
+    })) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
